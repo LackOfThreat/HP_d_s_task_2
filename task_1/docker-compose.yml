@@ -1,0 +1,168 @@
+version: '1'
+
+services:
+  config1number1:
+    container_name: config1number1 
+    image: mongo:5.0.0
+    restart: on-failure
+    volumes:
+      - ./secret.key:/auth/secret.key
+      - ./data/config1number1:/data/db
+    command: mongod --configsvr --replSet configrs --port 27017 --dbpath /data/db --keyFile /auth/secret.key
+  config1number2:
+    container_name: config1number2 
+    image: mongo:5.0.0
+    restart: on-failure
+    command: mongod --configsvr --replSet configrs --port 27017 --dbpath /data/db --keyFile /auth/secret.key
+    volumes:
+      - ./secret.key:/auth/secret.key
+      - ./data/config1number2:/data/db
+  config1number3:
+    container_name: config1number3 
+    image: mongo:5.0.0
+    restart: on-failure
+    command: mongod --configsvr --replSet configrs --port 27017 --dbpath /data/db --keyFile /auth/secret.key
+    volumes:
+      - ./secret.key:/auth/secret.key
+      - ./data/config1number3:/data/db
+  shard1number1:
+    container_name: shard1number1 
+    image: mongo:5.0.0
+    restart: on-failure
+    command: mongod --shardsvr --replSet shard1rs --port 27017 --dbpath /data/db --keyFile /auth/secret.key
+    volumes:
+      - ./secret.key:/auth/secret.key
+      - ./data/shard1number1:/data/db
+  shard1number2:
+    container_name: shard1number2 
+    image: mongo:5.0.0
+    restart: on-failure
+    command: mongod --shardsvr --replSet shard1rs --port 27017 --dbpath /data/db --keyFile /auth/secret.key
+    volumes:
+      - ./secret.key:/auth/secret.key
+      - ./data/shard1number2:/data/db
+  shard1number3:
+    container_name: shard1number3 
+    image: mongo:5.0.0
+    restart: on-failure
+    command: mongod --shardsvr --replSet shard1rs --port 27017 --dbpath /data/db --keyFile /auth/secret.key
+    volumes:
+      - ./secret.key:/auth/secret.key
+      - ./data/shard1number3:/data/db
+  shard2number1:
+    container_name: shard2number1 
+    image: mongo:5.0.0
+    restart: on-failure
+    command: mongod --shardsvr --replSet shard2rs --port 27017 --dbpath /data/db --keyFile /auth/secret.key
+    volumes:
+      - ./secret.key:/auth/secret.key
+      - ./data/shard2number1:/data/db
+  shard2number2:
+    container_name: shard2number2 
+    image: mongo:5.0.0
+    restart: on-failure
+    command: mongod --shardsvr --replSet shard2rs --port 27017 --dbpath /data/db --keyFile /auth/secret.key
+    volumes:
+      - ./secret.key:/auth/secret.key
+      - ./data/shard2number2:/data/db
+  shard2number3:
+    container_name: shard2number3 
+    image: mongo:5.0.0
+    restart: on-failure
+    command: mongod --shardsvr --replSet shard2rs --port 27017 --dbpath /data/db --keyFile /auth/secret.key
+    volumes:
+      - ./secret.key:/auth/secret.key
+      - ./data/shard2number3:/data/db
+  shard3number1:
+    container_name: shard3number1 
+    image: mongo:5.0.0
+    restart: on-failure
+    command: mongod --shardsvr --replSet shard3rs --port 27017 --dbpath /data/db --keyFile /auth/secret.key
+    volumes:
+      - ./secret.key:/auth/secret.key
+      - ./data/shard3number1:/data/db
+  shard3number2:
+    container_name: shard3number2 
+    image: mongo:5.0.0
+    restart: on-failure
+    command: mongod --shardsvr --replSet shard3rs --port 27017 --dbpath /data/db --keyFile /auth/secret.key
+    volumes:
+      - ./secret.key:/auth/secret.key
+      - ./data/shard3number2:/data/db
+  shard3number3:
+    container_name: shard3number3 
+    image: mongo:5.0.0
+    restart: on-failure
+    command: mongod --shardsvr --replSet shard3rs --port 27017 --dbpath /data/db --keyFile /auth/secret.key
+    volumes:
+      - ./secret.key:/auth/secret.key
+      - ./data/shard3number3:/data/db
+  shard4number1:
+    container_name: shard4number1 
+    image: mongo:5.0.0
+    restart: on-failure
+    command: mongod --shardsvr --replSet shard4rs --port 27017 --dbpath /data/db --keyFile /auth/secret.key
+    volumes:
+      - ./secret.key:/auth/secret.key
+      - ./data/shard4number1:/data/db
+  shard4number2:
+    container_name: shard4number2 
+    image: mongo:5.0.0
+    restart: on-failure
+    command: mongod --shardsvr --replSet shard4rs --port 27017 --dbpath /data/db --keyFile /auth/secret.key
+    volumes:
+      - ./secret.key:/auth/secret.key
+      - ./data/shard4number2:/data/db
+  shard4number3:
+    container_name: shard4number3 
+    image: mongo:5.0.0
+    restart: on-failure
+    command: mongod --shardsvr --replSet shard4rs --port 27017 --dbpath /data/db --keyFile /auth/secret.key
+    volumes:
+      - ./secret.key:/auth/secret.key
+      - ./data/shard4number3:/data/db
+  mongos:
+    container_name: mongos
+    image: mongo:5.0.0
+    restart: on-failure
+    depends_on:
+      - config1number1 
+      - config1number2 
+      - config1number3 
+    ports:
+      - "27016:27017" 
+    volumes:
+      - ./secret.key:/auth/secret.key
+    command: mongos --configdb configrs/config1number1:27017,config1number2:27017,config1number3:27017 --bind_ip 0.0.0.0 --port 27017 --keyFile /auth/secret.key
+
+volumes:
+  config1number1:
+    driver: local
+  config1number2:
+    driver: local
+  config1number3:
+    driver: local
+  shard1number1:
+    driver: local
+  shard1number2:
+    driver: local
+  shard1number3:
+    driver: local
+  shard2number1:
+    driver: local
+  shard2number2:
+    driver: local
+  shard2number3:
+    driver: local
+  shard3number1:
+    driver: local
+  shard3number2:
+    driver: local
+  shard3number3:
+    driver: local
+  shard4number1:
+    driver: local
+  shard4number2:
+    driver: local
+  shard4number3:
+    driver: local

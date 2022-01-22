@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  taxi:
+    container_name: taxi
+    build: .
+    tty: true
+    volumes:
+      - ./app:/app
+    network_mode: host
